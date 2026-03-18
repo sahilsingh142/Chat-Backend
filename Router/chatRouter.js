@@ -1,12 +1,8 @@
 import express from 'express';
 import SchemaData from '../UserSchema/userSchema.js';
-import { generateToken } from '../Jwt/token.js';
+import { generateToken, jwtAutherMiddleware } from '../Jwt/token.js';
 
 const router = express.Router();
-
-router.get('/data', (req, res) => {
-    res.send("This is the router");
-})
 
 router.post('/signup', async (req, res) => {
     try {
@@ -41,7 +37,7 @@ router.post('/login', async (req, res) => {
 
         const payload = {
             id: matchData.id,
-            name : matchData.name
+            name: matchData.name
         }
         const token = generateToken(payload);
         res.status(201).json({ message: "Login successful", data: matchData, token: token })
@@ -49,5 +45,12 @@ router.post('/login', async (req, res) => {
         console.log(err)
         return res.status(500).json({ err })
     }
+})
+
+router.get('/main', jwtAutherMiddleware, (req, res) => {
+    res.json({
+        message: "Welcome to Main Section",
+        user: req.user,
+    });
 })
 export default router;
