@@ -1,18 +1,18 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import chatRouter from './Router/chatRouter.js';
+import userRouter from './Router/userRouter.js';
 import mongoose from 'mongoose';
-import message from './Router/message.js';
+import messageRouter from './Router/messageRouter.js';
+import { app, server } from './Socket/socket.js';
 
 dotenv.config()
-const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/user', chatRouter);
-app.use('/api', message);
+app.use('/user', userRouter);
+app.use('/api', messageRouter);
 
 const mongoUrl = process.env.MONGO_URL;
 await mongoose.connect(mongoUrl)
@@ -26,6 +26,6 @@ app.get('/', (req,res) => {
 
 
 const PORT = process.env.PORT;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log("Connected");
 });

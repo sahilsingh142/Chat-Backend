@@ -1,10 +1,7 @@
-import express from 'express';
 import SchemaData from '../UserSchema/userSchema.js';
-import { generateToken, jwtAutherMiddleware } from '../Jwt/token.js';
+import { generateToken} from '../Jwt/token.js';
 
-const router = express.Router();
-
-router.post('/signup', async (req, res) => {
+export const signup = async (req, res) => {
     try {
         const userSchemaData = new SchemaData(req.body);
         const saveData = await userSchemaData.save();
@@ -21,9 +18,9 @@ router.post('/signup', async (req, res) => {
             message: "Server error"
         });
     }
-})
+}
 
-router.post('/login', async (req, res) => {
+export const login = async (req, res) => {
     const { email, password } = req.body;
     try {
         const matchData = await SchemaData.findOne({ email });
@@ -45,12 +42,11 @@ router.post('/login', async (req, res) => {
         console.log(err)
         return res.status(500).json({ err })
     }
-})
+}
 
-router.get('/main', jwtAutherMiddleware, (req, res) => {
+export const main = (req, res) => {
     res.json({
         message: "Welcome to Main Section",
         user: req.user,
     });
-})
-export default router;
+}
