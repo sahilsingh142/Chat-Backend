@@ -6,7 +6,14 @@ export const signup = async (req, res) => {
         const userSchemaData = new SchemaData(req.body);
         const saveData = await userSchemaData.save();
 
-        res.status(201).json({ message: "Signup successful", data: saveData })
+        const payload = {
+            id: saveData.id,
+            name: saveData.name
+        }
+
+       const token = generateToken(payload);
+
+        res.status(201).json({ message: "Signup successful", data: saveData, token: token })
     } catch (err) {
         if (err.code === 11000) {
             return res.status(400).json({

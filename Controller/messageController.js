@@ -1,6 +1,7 @@
-import {io, getReceiverSocketId} from '../Socket/socket.js'
+import { io, getReceiverSocketId } from '../Socket/socket.js'
 import Conversation from '../UserSchema/conversation.js'
 import Message from '../UserSchema/messageSchema.js';
+import User from '../UserSchema/userSchema.js';
 
 export const sendMessage = async (req, res) => {
     try {
@@ -66,3 +67,18 @@ export const getMessage = async (req, res) => {
     }
 };
 
+export const getUser = async (req, res) => {
+    try {
+        const search = req.query.search || "";
+        const users = await User.find({
+            name: {
+                $regex: search, $options: "i"
+            }
+        }).select("name email");
+        res.status(200).json({ success: true, users });
+    }
+    catch (err) {
+        console.log("SERVER ERROR:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+}

@@ -14,7 +14,7 @@ export const jwtAutherMiddleware = async (req, res, next) => {
 
     try {
         const decode = jwt.verify(token, process.env.JWT_SECRETKEY);
-        const user = await User.findById(decode.userId).select("-password");
+        const user = await User.findById(decode.id).select("-password");
         if (!user) {
             return res.status(400).json({ error: "No user found" });
         }

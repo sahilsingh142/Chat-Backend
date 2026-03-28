@@ -5,7 +5,7 @@ import { jwtAutherMiddleware } from '../Jwt/token.js';
 const router = express.Router();
 
 router.post('/signup',signup);
-router.post('./login',login);
-router.get('./main', jwtAutherMiddleware, main);
+router.post('/login',login);
+router.get('/main', jwtAutherMiddleware, main);
 
 export default router;
